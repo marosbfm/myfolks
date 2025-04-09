@@ -1,0 +1,19 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build MyFolks",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-c",
+                "g++ -g -std=c++17 -I/usr/include/SDL2 -D_REENTRANT -o build/MyFolks src/*.cpp $(sdl2-config --libs --cflags) -lSDL2_image"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        }
+    ]
+}
