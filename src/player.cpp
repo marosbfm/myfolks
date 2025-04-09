@@ -7,7 +7,7 @@ void Player::update(double delta)
 {
     lastPosition = position;
     position += velocity * speed * delta;
-
+    velocity = Vec2(0, 0);
     Logger::logOnecePerTime("player", LogLevel::DEBUG,
                             strutil::to_string("Player position: ", position));
 }
