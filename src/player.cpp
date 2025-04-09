@@ -1,10 +1,15 @@
 #include "player.h"
 #include <SDL.h>
+#include "logger.h"
+#include "string_utils.h"
 
 void Player::update(double delta)
 {
     lastPosition = position;
     position += velocity * speed * delta;
+
+    Logger::logOnecePerTime("player", LogLevel::DEBUG,
+                            strutil::to_string("Player position: ", position));
 }
 
 void Player::render(SDL_Renderer* renderer, double alpha)

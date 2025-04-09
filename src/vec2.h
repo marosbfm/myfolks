@@ -2,6 +2,7 @@
 #define VEC2_H
 
 #include <cmath>
+#include <iostream>
 
 struct Vec2
 {
@@ -68,5 +69,11 @@ struct Vec2
         return {x / len, y / len};
     }
 };
+
+inline std::ostream& operator<<(std::ostream& os, const Vec2& vec)
+{
+    os << "(" << vec.x << ", " << vec.y << ")";
+    return os;
+}
 
 #endif

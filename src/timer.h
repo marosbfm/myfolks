@@ -1,12 +1,14 @@
 #ifndef TIMER_H
 #define TIMER_H
 
+#include <chrono>
 #include <iostream>
 
 class Timer
 {
    public:
     static std::string currentDateTime();
+    static uint64_t currentTimeMillis();
     void init(double ups);
     void frame();
     bool shouldUpdate();

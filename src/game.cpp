@@ -3,6 +3,7 @@
 #include "logger.h"
 #include "string_utils.h"
 #include "timer.h"
+#include "cmath"
 
 Game::Game() : window(nullptr), renderer(nullptr), isRunning(false)
 {
@@ -98,7 +99,7 @@ void Game::render()
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
-    font.drawText(renderer, strutil::to_string("FPS: ", timer.getFPS()), 10, 10, 2);
+    font.drawText(renderer, strutil::to_string("FPS: ", static_cast<int>(std::floor(timer.getFPS()))), 10, 10, 4);
 
     player.render(renderer, timer.getAlpha());
     SDL_RenderPresent(renderer);

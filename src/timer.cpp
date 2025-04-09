@@ -19,6 +19,13 @@ std::string Timer::currentDateTime()
     return oss.str();
 }
 
+uint64_t Timer::currentTimeMillis()
+{
+    return std::chrono::duration_cast<std::chrono::milliseconds>(
+               std::chrono::system_clock::now().time_since_epoch())
+        .count();
+}
+
 void Timer::init(double upsRate)
 {
     ups = upsRate;

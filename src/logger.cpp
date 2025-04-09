@@ -2,6 +2,8 @@
 #include <iostream>
 #include "timer.h"
 
+std::unordered_map<std::string, uint64_t> Logger::lastLoggedTime;
+
 void Logger::log(LogLevel level, const std::string& message)
 {
     switch (level)
@@ -29,4 +31,36 @@ void Logger::log(LogLevel level, const std::string& message)
         default:
             break;
     }
+}
+
+void Logger::log(const std::string& tag, LogLevel level, const std::string& message)
+{
+    log(level, "[" + tag + "] " + message);
+}
+
+void Logger::logOnecePerTime(const std::string& tag, LogLevel level, const std::string& message,
+                             int timeIntervalMS)
+{
+    if (shouldLogPerTime(level, tag, timeIntervalMS))
+    {
+        log(tag, level, message);
+    }
+}
+
+bool Logger::shouldLogPerTime(LogLevel level, const std::string& tag, int timeIntervalMS)
+{
+    std::string key = tag + "_" + std::to_string(static_cast<int>(level));
+    uint64_t now = Timer::currentTimeMillis();
+
+    if (lastLoggedTime.find(key) == lastLoggedTime.end())
+    {
+        lastLoggedTime[key] = now;
+        return true;
+    }
+    else if (now - lastLoggedTime[key] > timeIntervalMS)
+    {
+        lastLoggedTime[key] = now;
+        return true;
+    }
+    return false;
 }
