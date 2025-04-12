@@ -3,6 +3,7 @@
 
 #include <SDL_render.h>
 #include "vec2.h"
+#include "scene.h"
 
 class GameObject
 {
