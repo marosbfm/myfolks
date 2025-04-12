@@ -1,9 +1,11 @@
 #include "game.h"
 #include <iostream>
+#include "base_scene.h"
+#include "cmath"
 #include "logger.h"
+#include "scene_manager.h"
 #include "string_utils.h"
 #include "timer.h"
-#include "cmath"
 
 Game::Game() : window(nullptr), renderer(nullptr), isRunning(false)
 {
@@ -47,9 +49,8 @@ Game::Game() : window(nullptr), renderer(nullptr), isRunning(false)
 
     isRunning = true;
     timer.init(60.0);
-
-    player = Player(Vec2(100, 100), 100);
-
+    Camera* camera = new Camera(Vec2(0, 0), Vec2(800, 600), 1);
+    SceneManager::getInstance()->setCurrentScene(new BaseScene(renderer, camera));
     Logger::log(LogLevel::INFO, "Game initialized");
 }
 
@@ -86,12 +87,12 @@ void Game::processInput()
     }
 
     const Uint8* keystate = SDL_GetKeyboardState(nullptr);
-    player.handleInput(keystate);
+    SceneManager::getInstance()->handleInput(keystate);
 }
 
 void Game::update()
 {
-    player.update(timer.getDelta());
+    SceneManager::getInstance()->update(timer.getDelta());
 }
 
 void Game::render()
@@ -99,14 +100,17 @@ void Game::render()
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
-    font.drawText(renderer, strutil::to_string("FPS: ", static_cast<int>(std::floor(timer.getFPS()))), 10, 10, 4);
+    font.drawText(renderer,
+                  strutil::to_string("FPS: ", static_cast<int>(std::floor(timer.getFPS()))), 10, 10,
+                  4);
 
-    player.render(renderer, timer.getAlpha());
+    SceneManager::getInstance()->render(timer.getAlpha());
     SDL_RenderPresent(renderer);
 }
 
 void Game::clean()
 {
+    SceneManager::getInstance()->clean();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();

@@ -2,22 +2,22 @@
 #define PLAYER_H
 
 #include "game_object.h"
+#include "scene.h"
 
 class Player : public GameObject
 {
    private:
-    float speed;
+    float speed = 100;
     Vec2 lastPosition;
     Vec2 direction;
     Vec2 velocity;
     float size = 10;
 
    public:
-    Player() : GameObject(Vec2(0, 0)){};
-    Player(Vec2 position, float speed) : GameObject(position), speed(speed){};
+    Player(Scene *scene, Vec2 position) : GameObject(scene, position){};
     void handleInput(const Uint8* keystate);
     void update(double delta) override;
-    void render(SDL_Renderer* renderer, double alpha) override;
+    void render(double alpha) override;
 };
 
 #endif

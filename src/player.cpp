@@ -12,14 +12,13 @@ void Player::update(double delta)
                             strutil::to_string("Player position: ", position));
 }
 
-void Player::render(SDL_Renderer* renderer, double alpha)
+void Player::render(double alpha)
 {
     Vec2 pos = lastPosition + (position - lastPosition) * alpha;
 
-    SDL_Rect rect = {static_cast<int>(pos.x), static_cast<int>(pos.y), static_cast<int>(size),
-                     static_cast<int>(size)};
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-    SDL_RenderDrawRect(renderer, &rect);
+    SDL_Rect rect = scene->camera->worldToScreenRect(pos, size, size);
+    SDL_SetRenderDrawColor(scene->renderer, 255, 0, 0, 255);
+    SDL_RenderDrawRect(scene->renderer, &rect);
 }
 
 void Player::handleInput(const Uint8* keystate)

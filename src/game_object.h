@@ -7,13 +7,15 @@
 class GameObject
 {
    protected:
+    Scene* scene;
     Vec2 position;
 
+
    public:
-    GameObject(Vec2 position) : position(position){};
+    GameObject(Scene *scene, Vec2 position) : scene(scene), position(position){};
     virtual ~GameObject() = default;
     virtual void update(double delta) = 0;
-    virtual void render(SDL_Renderer* renderer, double alpha) = 0;
+    virtual void render(double alpha) = 0;
     Vec2 getPosition()
     {
         return position;
