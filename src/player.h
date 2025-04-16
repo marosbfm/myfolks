@@ -14,10 +14,14 @@ class Player : public GameObject
     float size = 10;
 
    public:
-    Player(Scene *scene, Vec2 position) : GameObject(scene, position){};
+    Player(Scene* scene, Vec2 position) : GameObject(scene, position, size, size){};
     void handleInput(const Uint8* keystate);
     void update(double delta) override;
     void render(double alpha) override;
+    bool init() override
+    {
+        return true;
+    }
 };
 
 #endif

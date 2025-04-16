@@ -9,8 +9,11 @@ class Scene
    public:
     SDL_Renderer* renderer;
     Camera* camera;
+    float width;
+    float height;
 
-    Scene(SDL_Renderer* renderer, Camera* camera) : renderer(renderer), camera(camera){};
+    Scene(SDL_Renderer* renderer, Camera* camera, float width, float height)
+        : renderer(renderer), camera(camera), width(width), height(height){};
     virtual void update(double delta) = 0;
     virtual void render(double alpha) = 0;
     virtual void handleInput(const Uint8* keystate) = 0;

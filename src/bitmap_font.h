@@ -8,21 +8,21 @@
 class BitmapFont
 {
    public:
-    BitmapFont();
-    ~BitmapFont();
+    BitmapFont(int charWidth, int charHeight, int charsPerRow)
+        : charWidth(charWidth), charHeight(charHeight), charsPerRow(charsPerRow){};
+    virtual ~BitmapFont() = 0;
 
-    bool load(SDL_Renderer* renderer, const std::string& path, int charWidth, int charHeight,
-              int charsPerRow);
-    void setCharset(const std::string& charset);
     void drawText(SDL_Renderer* renderer, const std::string& text, int x, int y, int scale = 1);
+    virtual bool init() = 0;
 
-   private:
+   protected:
     SDL_Texture* texture;
     int charWidth;
     int charHeight;
     int charsPerRow;
-
     std::unordered_map<char, int> charMap;
+
+    void setCharset(const std::string& charset);
 };
 
 #endif

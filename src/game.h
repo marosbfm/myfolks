@@ -2,7 +2,7 @@
 #define GAME_H
 
 #include <SDL.h>
-#include "bitmap_font.h"
+#include "main_font.h"
 #include "player.h"
 #include "timer.h"
 
@@ -17,7 +17,7 @@ class Game
    private:
     SDL_Window* window;
     SDL_Renderer* renderer;
-    BitmapFont font;
+    MainFont* font;
     Timer timer;
     bool isRunning;
     void processInput();

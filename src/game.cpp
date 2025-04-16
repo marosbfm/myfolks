@@ -1,22 +1,27 @@
 #include "game.h"
 #include <iostream>
+#include "assets_manager.h"
 #include "base_scene.h"
 #include "cmath"
 #include "logger.h"
+#include "main_font.h"
 #include "scene_manager.h"
 #include "string_utils.h"
 #include "timer.h"
 
 Game::Game() : window(nullptr), renderer(nullptr), isRunning(false)
 {
+    float width = 800;
+    float height = 600;
+
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
         Logger::log(LogLevel::FATAL, strutil::to_string("SDL init failed: ", SDL_GetError()));
         return;
     }
 
-    window = SDL_CreateWindow("MyFolks", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600,
-                              SDL_WINDOW_SHOWN);
+    window = SDL_CreateWindow("MyFolks", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width,
+                              height, SDL_WINDOW_SHOWN);
 
     if (window == nullptr)
     {
@@ -34,23 +39,20 @@ Game::Game() : window(nullptr), renderer(nullptr), isRunning(false)
         return;
     }
 
-    font = BitmapFont();
-    if (!font.load(
-            renderer,
-            "assets/fonts/hello_my_old_friend/spr_font_hellomyoldfriend_12x12_by_lotovik_sheet.png",
-            12, 12, 10))
+    AssetsManager::getInstance()->loadAssets(renderer);
+
+    font = new MainFont();
+
+    if (!font->init())
     {
-        Logger::log(LogLevel::FATAL, "Failed to load font");
+        Logger::log(LogLevel::FATAL, "Failed to init font");
         return;
     }
-    font.setCharset(
-        " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789$￠€£¥¤+-*/"
-        "÷=%‰\"'#@&_(),.;:¿?¡!\\|{}<>[]§¶µ`^~©®™");
 
     isRunning = true;
     timer.init(60.0);
-    Camera* camera = new Camera(Vec2(0, 0), Vec2(800, 600), 1);
-    SceneManager::getInstance()->setCurrentScene(new BaseScene(renderer, camera));
+    Camera* camera = new Camera(Vec2(0, 0), Vec2(width, height), 1);
+    SceneManager::getInstance()->setCurrentScene(new BaseScene(renderer, camera, width, height));
     Logger::log(LogLevel::INFO, "Game initialized");
 }
 
@@ -100,9 +102,9 @@ void Game::render()
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
-    font.drawText(renderer,
-                  strutil::to_string("FPS: ", static_cast<int>(std::floor(timer.getFPS()))), 10, 10,
-                  4);
+    font->drawText(renderer,
+                   strutil::to_string("FPS: ", static_cast<int>(std::floor(timer.getFPS()))), 10,
+                   10, 4);
 
     SceneManager::getInstance()->render(timer.getAlpha());
     SDL_RenderPresent(renderer);
@@ -110,6 +112,7 @@ void Game::render()
 
 void Game::clean()
 {
+    delete font;
     SceneManager::getInstance()->clean();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
