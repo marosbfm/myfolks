@@ -1,6 +1,7 @@
 #include "base_ground.h"
 #include <vector>
 #include "assets_manager.h"
+#include "box_collider.h"
 #include "logger.h"
 
 bool BaseGround::init()
@@ -22,6 +23,8 @@ bool BaseGround::init()
         }
     }
 
+    collider = new BoxCollider(position, width, height);
+
     return true;
 }
 
@@ -38,7 +41,11 @@ void BaseGround::render(double alpha)
             SDL_RenderCopy(scene->renderer, texture, &srcRect, &dstRect);
         }
     }
-    
 }
 
 void BaseGround::update(double delta) {}
+
+BaseGround::~BaseGround()
+{
+    delete collider;
+}

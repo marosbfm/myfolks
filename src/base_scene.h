@@ -5,6 +5,7 @@
 #include "base_ground.h"
 #include "player.h"
 #include "scene.h"
+#include "scene_grid.h"
 
 class BaseScene : public Scene
 {
@@ -14,8 +15,13 @@ class BaseScene : public Scene
     void update(double delta) override;
     void render(double alpha) override;
     void handleInput(const Uint8* keystate) override;
+    SceneGrid* getSceneGrid()
+    {
+        return sceneGrid;
+    }
 
    private:
+    SceneGrid* sceneGrid;
     Player* player;
     BaseGround* baseGround;
 };

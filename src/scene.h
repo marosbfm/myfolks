@@ -3,6 +3,7 @@
 
 #include <SDL.h>
 #include "camera.h"
+#include "scene_grid.h"
 
 class Scene
 {
@@ -17,7 +18,7 @@ class Scene
     virtual void update(double delta) = 0;
     virtual void render(double alpha) = 0;
     virtual void handleInput(const Uint8* keystate) = 0;
-
+    virtual SceneGrid* getSceneGrid() = 0;
     virtual ~Scene() = default;
 };
 

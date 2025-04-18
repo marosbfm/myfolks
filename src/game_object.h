@@ -4,6 +4,7 @@
 #include <SDL_render.h>
 #include "scene.h"
 #include "vec2.h"
+#include "collider.h"
 
 class GameObject
 {
@@ -20,6 +21,7 @@ class GameObject
     virtual bool init() = 0;
     virtual void update(double delta) = 0;
     virtual void render(double alpha) = 0;
+    virtual Collider* getCollider() = 0;
     Vec2 getPosition()
     {
         return position;
