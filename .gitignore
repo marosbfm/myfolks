@@ -1,0 +1,5 @@
+# Ignoruj všetko v build/
+build/*
+
+# ...ale nechaj build/ priečinok existovať
+!build/.gitkeep
