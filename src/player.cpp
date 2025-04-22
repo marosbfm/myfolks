@@ -5,10 +5,13 @@
 
 void Player::update(double delta)
 {
+    scene->getSceneGrid()->removeGameObject(this);
     auto objects = scene->getSceneGrid()->getCloseObjectsForGameObject(this);
 
     lastPosition = Vec2(position);
-    position += velocity * speed * delta;
+    Vec2 movement = velocity * speed * delta;
+    velocity = Vec2(0, 0);
+    position += movement;
 
     Logger::logOnecePerTime("player", LogLevel::DEBUG,
                             strutil::to_string("Player position: ", position));
@@ -17,16 +20,22 @@ void Player::update(double delta)
 
     for (auto object : objects)
     {
+        if (object == this)
+            continue;
+
         if (collider->checkCollision(object->getCollider()))
         {
-            position = collider->getContactPoint(velocity, object->getCollider());
-            collider->position = position;
-            break;
+            auto optionalPosition = collider->getContactPoint(movement, object->getCollider());
+            if (optionalPosition.has_value())
+            {
+                collider->position = optionalPosition.value();
+                position = collider->position;
+                break;
+            }
         }
     }
 
-    velocity = Vec2(0, 0);
-    sceneGrid->updatePositionForGameObject(lastPosition, this);
+    scene->getSceneGrid()->addGameObject(this);
 }
 
 void Player::render(double alpha)

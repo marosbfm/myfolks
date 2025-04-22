@@ -1,4 +1,5 @@
 #include "scene_grid.h"
+#include "game_object.h"
 
 SceneGrid::SceneGrid(float width, float height, float cellSize)
     : width(width), height(height), cellSize(cellSize)
@@ -11,28 +12,48 @@ SceneGrid::SceneGrid(float width, float height, float cellSize)
         grid[i].resize(cols);
     }
 }
+void SceneGrid::forEachCellOccupiedByObject(GameObject* object,
+                                            std::function<void(int, int)> callback)
+{
+    float objX = object->getPosition().x;
+    float objY = object->getPosition().y;
+
+    for (float y = objY; y < objY + height; y += cellSize)
+    {
+        int row = static_cast<int>(y / cellSize);
+        for (float x = objX; x < objX + width; x += cellSize)
+        {
+            int col = static_cast<int>(x / cellSize);
+            callback(row, col);
+        }
+    }
+}
 
 void SceneGrid::addGameObject(GameObject* object)
 {
-    int row = static_cast<int>(object->getPosition().y / cellSize);
-    int col = static_cast<int>(object->getPosition().x / cellSize);
-    grid[row][col].insert(object);
+    auto addToCell = [this, object](int row, int col)
+    {
+        if (row >= 0 && row < static_cast<int>(grid.size()) && col >= 0 &&
+            col < static_cast<int>(grid[0].size()))
+        {
+            grid[row][col].insert(object);
+        }
+    };
+
+    forEachCellOccupiedByObject(object, addToCell);
 }
 void SceneGrid::removeGameObject(GameObject* object)
 {
-    int row = static_cast<int>(object->getPosition().y / cellSize);
-    int col = static_cast<int>(object->getPosition().x / cellSize);
-    grid[row][col].erase(object);
-}
+    auto removeFromCell = [this, object](int row, int col)
+    {
+        if (row >= 0 && row < static_cast<int>(grid.size()) && col >= 0 &&
+            col < static_cast<int>(grid[0].size()))
+        {
+            grid[row][col].erase(object);
+        }
+    };
 
-void SceneGrid::updatePositionForGameObject(Vec2 oldPosition, GameObject* object)
-{
-    int oldRow = static_cast<int>(oldPosition.y / cellSize);
-    int oldCol = static_cast<int>(oldPosition.x / cellSize);
-    int newRow = static_cast<int>(object->getPosition().y / cellSize);
-    int newCol = static_cast<int>(object->getPosition().x / cellSize);
-    grid[oldRow][oldCol].erase(object);
-    grid[newRow][newCol].insert(object);
+    forEachCellOccupiedByObject(object, removeFromCell);
 }
 
 GameObjectSet SceneGrid::getCloseObjectsForGameObject(GameObject* gameObject)
