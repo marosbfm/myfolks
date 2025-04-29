@@ -18,6 +18,7 @@ class SceneGrid
     void addGameObject(GameObject* object);
     void removeGameObject(GameObject* object);
     GameObjectSet getCloseObjectsForGameObject(GameObject* gameObject);
+    GameObjectSet getCloseObjectsForGameObject(GameObject* gameObject, Vec2 movement);
 
    private:
     float width;
@@ -26,6 +27,6 @@ class SceneGrid
     int cols;
     int rows;
     std::vector<std::vector<GameObjectSet>> grid;
-    void forEachCellOccupiedByObject(GameObject* object, std::function<void(int, int)> callback);
+    void forEachCellOccupiedByObject(Vec2 position, float objWidth, float objHeight, std::function<void(int, int)> callback);
 };
 #endif

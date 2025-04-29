@@ -15,7 +15,7 @@ class BaseScene : public Scene
     void update(double delta) override;
     void render(double alpha) override;
     void handleInput(const Uint8* keystate) override;
-    SceneGrid* getSceneGrid()
+    SceneGrid* getSceneGrid() override
     {
         return sceneGrid;
     }

@@ -16,7 +16,7 @@ class Player : public GameObject
     BoxCollider* collider = nullptr;
 
    public:
-    Player(Scene* scene, Vec2 position);
+    Player(Scene* scene, Vec2 position, float width, float height);
     void handleInput(const Uint8* keystate);
     void update(double delta) override;
     void render(double alpha) override;

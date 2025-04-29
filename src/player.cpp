@@ -5,6 +5,7 @@
 
 void Player::update(double delta)
 {
+    /*
     scene->getSceneGrid()->removeGameObject(this);
     auto objects = scene->getSceneGrid()->getCloseObjectsForGameObject(this);
 
@@ -36,6 +37,7 @@ void Player::update(double delta)
     }
 
     scene->getSceneGrid()->addGameObject(this);
+    */
 }
 
 void Player::render(double alpha)
@@ -47,9 +49,9 @@ void Player::render(double alpha)
     SDL_RenderDrawRect(scene->renderer, &rect);
 }
 
-Player::Player(Scene* scene, Vec2 position) : GameObject(scene, position, size, size)
+Player::Player(Scene* scene, Vec2 position, float width, float height) : GameObject(scene, position, width, height)
 {
-    collider = new BoxCollider(position, size, size);
+    collider = new BoxCollider(position, width, height);
 }
 
 void Player::handleInput(const Uint8* keystate)

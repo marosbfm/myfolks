@@ -1,6 +1,10 @@
 #ifndef COLLISION_RESULT_H
 #define COLLISION_RESULT_H
 
+#include "vec2.h"
+#include "game_object.h"
+
+class GameObject;
 struct CollisionResult
 {
     bool hit = false;

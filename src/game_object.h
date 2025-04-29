@@ -2,9 +2,11 @@
 #define GAME_OBJECT_H
 
 #include <SDL_render.h>
+#include "collider.h"
 #include "scene.h"
 #include "vec2.h"
-#include "collider.h"
+
+class Collider;
 
 class GameObject
 {
@@ -16,7 +18,7 @@ class GameObject
 
    public:
     GameObject(Scene* scene, Vec2 position, float width, float height)
-        : scene(scene), position(position), width(width), height(height){};
+        : scene(scene), position(position), width(width), height(height) {};
     virtual ~GameObject() = default;
     virtual bool init() = 0;
     virtual void update(double delta) = 0;
@@ -29,6 +31,15 @@ class GameObject
     void setPosition(Vec2 position)
     {
         this->position = position;
+    }
+    float getWidth()
+    {
+        return width;
+    }
+
+    float getHeight()
+    {
+        return height;
     }
 };
 

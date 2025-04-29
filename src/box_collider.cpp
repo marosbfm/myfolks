@@ -2,69 +2,51 @@
 
 BoxCollider::~BoxCollider() {}
 
-bool BoxCollider::checkCollision(Collider* other)
+CollisionResult* BoxCollider::checkCollision(GameObject* other, Vec2 movement)
 {
-    if (dynamic_cast<BoxCollider*>(other))
-    {
-        auto otherBox = dynamic_cast<BoxCollider*>(other);
-        if (position.x + width > otherBox->position.x &&
-            position.x < otherBox->position.x + otherBox->width &&
-            position.y + height > otherBox->position.y &&
-            position.y < otherBox->position.y + otherBox->height)
-        {
-            return true;
-        }
-    }
-    return false;
-}
+   auto result = new CollisionResult();
+   result->hit = false;
+   result->normal = Vec2(0, 0);
+   result->point = Vec2(0, 0);
+   result->distance = 0;
+   result->object = other;
 
-std::optional<Vec2> BoxCollider::getContactPoint(Vec2 movement, Collider* other)
-{
-    if (dynamic_cast<BoxCollider*>(other))
-    {
-        auto otherBox = dynamic_cast<BoxCollider*>(other);
-        if (checkCollision(other))
-        {
-            float nextX = position.x + movement.x;
-            float nextY = position.y + movement.y;
-            Vec2 result = Vec2(nextX, nextY);
+   if (other->getCollider == nullptr ){
+       return result;
+   }
+   BoxCollide* otherBox = dynamic_cast<BoxCollider*> other->getCollider();
+   if (otherBox){
+      if (movement.x > 1){
+         //namiesto usecky ako strany spravim ray cast
+         float ax = position.x + width + movement.x;
+         float ay = position.y + movement.y; 
+         float bx = position.x + width + movement.x;
+         float by = position.y + height + movement.y;
 
-            if (movement.x > 0)
-            {
-                if (nextX + width > otherBox->position.x &&
-                    position.x <= otherBox->position.x + otherBox->width)
-                {
-                    result.x = otherBox->position.x - width - 0.01f;
-                }
-            }
-            else if (movement.x < 0)
-            {
-                if (nextX < otherBox->position.x + otherBox->width &&
-                    position.x + width >= otherBox->position.x)
-                {
-                    result.x = otherBox->position.x + otherBox->width + 0.01f;
-                }
-            }
+         float cx = otherBox->position.x;
+         float cy = otherBox->position.y;
+         float dx = otherBox->position.x;
+         float dy = otherBox->position.y + otherBox->height;
+         
+  
 
-            if (movement.y > 0)
-            {
-                if (nextY + height > otherBox->position.y &&
-                    position.y <= otherBox->position.y + otherBox->height)
-                {
-                    result.y = otherBox->position.y - height - 0.01f;
-                }
-            }
-            else if (movement.y < 0)
-            {
-                if (nextY < otherBox->position.y + otherBox->height &&
-                    position.y + height >= otherBox->position.y)
-                {
-                    result.y = otherBox->position.y + otherBox->height + 0.01f;
-                }
-            }
 
-            return result;
-        }
-    }
-    return std::nullopt;
+
+
+
+
+      }else if (movement.x < -1){
+
+      }
+
+      if (movement.y > 1){
+
+      }else if (movement.y < -1){
+         
+      }
+      
+
+   }
+
+   return result;
 }

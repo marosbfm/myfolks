@@ -9,8 +9,8 @@ class CollisionSystem
     Scene* scene;
 
    public:
-    CollisionResult sweep(Collider* collider, Vec2 movement);
-    void setScene(Scene* scene) : scene(scene) {}
-}
+    std::vector<CollisionResult> sweep(GameObject* object, Vec2 movement);
+    void setScene(Scene* scene) { this->scene = scene; };
+};
 
 #endif

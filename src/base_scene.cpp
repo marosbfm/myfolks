@@ -5,7 +5,7 @@ BaseScene::BaseScene(SDL_Renderer* renderer, Camera* camera, float width, float 
 {
     sceneGrid = new SceneGrid(width, height, 32);
 
-    player = new Player(this, Vec2(100, 100));
+    player = new Player(this, Vec2(100, 100), 32, 32);
     auto yPos = height - 64;
     baseGround = new BaseGround(this, Vec2(0, yPos), width, 64);
     baseGround->init();
